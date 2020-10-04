@@ -25,7 +25,7 @@ def get_json(url):
 
 
 def get_post_data(url):
-    jsontext = get_json(url)
+    jsontext = get_json_old(url)
 
     caption = jsontext['edge_media_to_caption']['edges'][0]['node']['text']
     words = caption.split()

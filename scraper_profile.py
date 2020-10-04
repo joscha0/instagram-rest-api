@@ -25,7 +25,7 @@ def get_json(username):
 
 
 def get_profile_data(username):
-    jsontext = get_json(username)
+    jsontext = get_json_old(username)
     ig_tv_likes = 0
     ig_tv_comments = 0
     ig_tv_views = 0
