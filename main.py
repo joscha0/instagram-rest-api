@@ -9,7 +9,7 @@ from models import Post, User
 app = FastAPI()
 
 
-@app.get("/u/{username}", response_model=User)
+@app.get("/u/{username}")
 def get_data_username(username: str):
     """
     Get Data of user
@@ -17,7 +17,7 @@ def get_data_username(username: str):
     return get_profile_data(username)
 
 
-@app.get("/p/{post}", response_model=Post)
+@app.get("/p/{post}")
 def get_data_post(post: str):
     """
     Get Data of post
