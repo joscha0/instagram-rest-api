@@ -31,10 +31,10 @@ class User(BaseModel):
     name: str
     full_name: str
     bio: str
-    url: str
+    url: Optional[str] = None
     is_business: bool
     is_joined_recently: bool
-    business_category_name: str
+    business_category_name: Optional[str] = None
     is_private: bool
     is_verified: bool
     ig_tv_videos: int
