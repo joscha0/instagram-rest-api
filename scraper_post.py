@@ -1,4 +1,4 @@
-from requests import get
+import requests
 from bs4 import BeautifulSoup
 import sys
 import re
@@ -6,13 +6,27 @@ import json
 from datetime import datetime
 
 
-def get_post_data(url):
-    page = get(url, timeout=5)
+def get_json_old(url):
+    """
+    backup get json function if instagram closes /?__a=1
+    """
+
+    page = requests.get(url, timeout=5)
     soup = BeautifulSoup(page.content, 'html.parser')
     retext = re.findall(
         '<script type="text\/javascript">([^{]+?({.*profile_pic_url.*})[^}]+?)<\/script>', str(soup))[0][1]
-    jsontext = json.loads(
+    return json.loads(
         retext)['entry_data']['PostPage'][0]['graphql']['shortcode_media']
+
+
+def get_json(url):
+    url += '?__a=1'
+    return json.loads(requests.get(url, timeout=5).text)['graphql']['shortcode_media']
+
+
+def get_post_data(url):
+    jsontext = get_json(url)
+
     caption = jsontext['edge_media_to_caption']['edges'][0]['node']['text']
     words = caption.split()
     hashtags = [x.strip('#') for x in words if x.startswith('#')]
