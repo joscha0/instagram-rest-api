@@ -4,6 +4,7 @@ import sys
 import re
 import json
 from datetime import datetime
+import os
 
 
 def get_json_old(url):
@@ -20,8 +21,12 @@ def get_json_old(url):
 
 
 def get_json(url):
+    proxyDict = {
+        "http": os.environ.get('FIXIE_URL', ''),
+        "https": os.environ.get('FIXIE_URL', '')
+    }
     url += '?__a=1'
-    return json.loads(requests.get(url, timeout=5).text)['graphql']['shortcode_media']
+    return json.loads(requests.get(url, timeout=5, proxies=proxyDict).text)['graphql']['shortcode_media']
 
 
 def get_post_data(url):

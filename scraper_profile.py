@@ -4,6 +4,7 @@ import sys
 import re
 import json
 from datetime import datetime
+import os
 
 
 def get_json_old(username):
@@ -20,12 +21,16 @@ def get_json_old(username):
 
 
 def get_json(username):
+    proxyDict = {
+        "http": os.environ.get('FIXIE_URL', ''),
+        "https": os.environ.get('FIXIE_URL', '')
+    }
     url = f'https://www.instagram.com/{username}/?__a=1'
-    return json.loads(requests.get(url, timeout=5).text)
+    return json.loads(requests.get(url, timeout=5).text, proxies=proxyDict)
 
 
 def get_profile_data(username):
-    jsontext = get_json_old(username)
+    jsontext = get_json(username)
     ig_tv_likes = 0
     ig_tv_comments = 0
     ig_tv_views = 0
