@@ -1,23 +1,31 @@
-from requests import get
+import requests
 from bs4 import BeautifulSoup
 import sys
 import re
 import json
 from datetime import datetime
 
-URL = 'https://www.instagram.com'
+
+def get_json_old(username):
+    """
+    backup get json function if instagram closes /?__a=1
+    """
+
+    url = f'https://www.instagram.com/{username}'
+    page = requests.get(url, timeout=5)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    retext = re.findall(
+        '<script type="text\/javascript">([^{]+?({.*profile_pic_url.*})[^}]+?)<\/script>', str(soup))[0][1]
+    return json.loads(retext)['entry_data']['ProfilePage'][0]
+
+
+def get_json(username):
+    url = f'https://www.instagram.com/{username}/?__a=1'
+    return json.loads(requests.get(url, timeout=5).text)
 
 
 def get_profile_data(username):
-    url = '%s/%s/' % (URL, username)
-    page = get(url, timeout=5)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    data = soup.find_all('meta', attrs={'property': 'og:description'})
-    photo = soup.find_all('meta', attrs={'property': 'og:image'})
-    text = data[0].get('content').split()
-    retext = re.findall(
-        '<script type="text\/javascript">([^{]+?({.*profile_pic_url.*})[^}]+?)<\/script>', str(soup))[0][1]
-    jsontext = json.loads(retext)['entry_data']['ProfilePage'][0]
+    jsontext = get_json(username)
     ig_tv_likes = 0
     ig_tv_comments = 0
     ig_tv_views = 0
@@ -95,10 +103,7 @@ def get_profile_data(username):
         'highlight_reel_count': jsontext['graphql']['user']['highlight_reel_count'],
         'has_channel': jsontext['graphql']['user']['has_channel'],
 
-        'posts': text[4],
-        'followers': text[0],
-        'following': text[2],
-        'photo_url': photo[0].get('content'),
+
         'followerCount': jsontext['graphql']['user']['edge_followed_by']['count'],
         'followingCount': jsontext['graphql']['user']['edge_follow']['count'],
         'postCount': jsontext['graphql']['user']['edge_owner_to_timeline_media']['count'],
@@ -113,7 +118,7 @@ def get_profile_data(username):
         'total_media_views': media_views,
         'total_meadia_count': media_count,
 
-        'engagement_rate': (media_likes / media_count) / jsontext['graphql']['user']['edge_followed_by']['count'] if media_count != 0 and jsontext['graphql']['user']['edge_followed_by']['count'] != 0 else None,
+        'engagement_rate': (media_likes / media_count) / jsontext['graphql']['user']['edge_followed_by']['count'] if media_count != 0 and jsontext['graphql']['user']['edge_followed_by']['count'] != 0 else 0,
 
         'media_list': media_list,
 
