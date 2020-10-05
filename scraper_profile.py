@@ -22,7 +22,7 @@ def get_json_old(username):
 
 def get_json(username):
     proxyDict = {
-        "http": os.environ.get['proxy'],
+        "http": os.environ['proxy'],
     }
     url = f'https://www.instagram.com/{username}/?__a=1'
     return json.loads(requests.get(url, timeout=5, proxies=proxyDict).text)
