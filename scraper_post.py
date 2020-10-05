@@ -22,7 +22,7 @@ def get_json_old(url):
 
 def get_json(url):
     proxyDict = {
-        "http": os.environ['QUOTAGUARDSTATIC_URL'],
+        "http": os.environ.get['proxy']
     }
     url += '?__a=1'
     return json.loads(requests.get(url, timeout=5, proxies=proxyDict).text)['graphql']['shortcode_media']
