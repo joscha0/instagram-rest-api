@@ -22,7 +22,8 @@ def get_json_old(url):
 
 def get_json(url):
     proxyDict = {
-        "http": os.environ['proxy']
+        "http": os.environ.get('IPB_HTTP', ''),
+        "https": os.environ.get('IPB_HTTPS', '')
     }
     url += '?__a=1'
     return json.loads(requests.get(url, timeout=5, proxies=proxyDict).text)['graphql']['shortcode_media']
