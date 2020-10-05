@@ -22,7 +22,7 @@ def get_data_post(post: str):
     """
     Get Data of post
     """
-    return get_post_data(f"https://www.instagram.com/p/{post}")
+    return get_post_data(f"http://www.instagram.com/p/{post}")
 
 
 def custom_openapi():

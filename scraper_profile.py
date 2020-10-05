@@ -12,7 +12,7 @@ def get_json_old(username):
     backup get json function if instagram closes /?__a=1
     """
 
-    url = f'https://www.instagram.com/{username}'
+    url = f'http://www.instagram.com/{username}'
     page = requests.get(url, timeout=5)
     soup = BeautifulSoup(page.content, 'html.parser')
     retext = re.findall(
@@ -25,7 +25,7 @@ def get_json(username):
         "http": os.environ.get('IPB_HTTP', ''),
         "https": os.environ.get('IPB_HTTPS', '')
     }
-    url = f'https://www.instagram.com/{username}/?__a=1'
+    url = f'http://www.instagram.com/{username}/?__a=1'
     return json.loads(requests.get(url, timeout=5, proxies=proxyDict).text)
 
 
