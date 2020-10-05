@@ -22,10 +22,10 @@ def get_json_old(username):
 
 def get_json(username):
     proxyDict = {
-        "http": os.environ['QUOTAGUARDSTATIC_URL'],
+        "http": os.environ.get('QUOTAGUARDSTATIC_URL', ''),
     }
     url = f'https://www.instagram.com/{username}/?__a=1'
-    return json.loads(requests.get(url, timeout=5).text, proxies=proxyDict)
+    return json.loads(requests.get(url, timeout=5, proxies=proxyDict).text)
 
 
 def get_profile_data(username):
