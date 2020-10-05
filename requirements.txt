@@ -5,4 +5,4 @@ bs4
 gunicorn
 uvloop
 httptools
-requests[socks]
+pysocks
